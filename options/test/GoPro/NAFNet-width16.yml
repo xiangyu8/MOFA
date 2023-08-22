@@ -1,0 +1,64 @@
+# ------------------------------------------------------------------------
+# Copyright (c) 2022 megvii-model. All Rights Reserved.
+# ------------------------------------------------------------------------
+# Modified from BasicSR (https://github.com/xinntao/BasicSR)
+# Copyright 2018-2020 BasicSR Authors
+# ------------------------------------------------------------------------
+# general settings
+name: NAFNet-GoPro-width16
+model_type: ImageRestorationModel
+scale: 1
+num_gpu: 8
+manual_seed: 42
+
+datasets:
+  val:
+    name: gopro-test
+    type: PairedImageDataset
+    dataroot_gt: ../datasets/GoPro/test/target.lmdb
+    dataroot_lq: ../datasets/GoPro/test/input.lmdb
+    io_backend:
+      type: lmdb
+
+
+network_g:
+  type: NAFNetLocal
+  width: 16
+  enc_blk_nums: [1, 1, 1]
+  middle_blk_num: 1
+  dec_blk_nums: [1, 1, 1]
+
+# path
+path:
+  pretrain_network_g: ./experiments/NAFNet-GoPro-width16/models/net_g_latest.pth 
+  strict_load_g: true
+  resume_state: ~
+
+# validation settings
+val:
+  save_img: true
+
+
+  metrics:
+    psnr: # metric name, can be arbitrary
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: false
+    ssim:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: false
+
+# logging settings
+logger:
+  print_freq: 200
+  save_checkpoint_freq: !!float 5e3
+  use_tb_logger: true
+  wandb:
+    project: ~
+    resume_id: ~
+
+# dist training settings
+dist_params:
+  backend: nccl
+  port: 29500
