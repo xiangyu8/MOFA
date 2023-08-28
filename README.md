@@ -1,4 +1,4 @@
-## This is the official repo for ICCV Workshop paper "MOFA: A Model Simplification Roadmap for Image Restoration on Mobile Devices."
+## This is the official repo for ICCV Workshop paper "[MOFA: A Model Simplification Roadmap for Image Restoration on Mobile Devices](https://arxiv.org/abs/2308.12494)."
 ### Environment
 ```
 pip install -r requirement.txt
